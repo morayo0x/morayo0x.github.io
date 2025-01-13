@@ -3,14 +3,15 @@ import defaultTheme from "tailwindcss/defaultTheme";
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ["class"],
-  content: [
-    "./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}",
-  ],
+  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", ...defaultTheme.fontFamily.sans],
+        // sans: ["Inter", ...defaultTheme.fontFamily.sans],
+        sans: ["Cormorant Garamond", ...defaultTheme.fontFamily.sans],
         serif: ["Lora", ...defaultTheme.fontFamily.serif],
+        // serif: ["Cormorant Garamond", ...defaultTheme.fontFamily.serif],
+        // serif: ["Newsreader", ...defaultTheme.fontFamily.serif],
       },
     },
   },
