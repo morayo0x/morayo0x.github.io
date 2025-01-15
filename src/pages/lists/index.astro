@@ -2,9 +2,9 @@
 import { getCollection } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
-import ListCard from "@components/ListCard.astro";
+// import ListCard from "@components/ListCard.astro";
 import { LIST } from "@consts";
-import { collections } from "@content/config";
+// import { collections } from "@content/config";
 
 const collection = (await getCollection("lists")).sort(
   (a, b) => a.data.date.valueOf() - b.data.date.valueOf()
