@@ -27,11 +27,7 @@ export function articleSchema(post: CollectionEntry<'writing'>, site: URL, ogIma
     image: ogImage,
     datePublished: post.data.pubDate.toISOString(),
     dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
-    author: {
-      '@type': 'Person',
-      name: post.data.authors?.[0] ?? 'Usman Kolawole',
-      url: site.toString(),
-    },
+
     publisher: {
       '@type': 'Person',
       name: 'Usman Kolawole',

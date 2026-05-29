@@ -27,7 +27,6 @@ export async function GET(context: APIContext) {
       description: post.data.description,
       link: `/writing/${post.id.replace(/\.md$/, '')}/`,
       categories: [post.data.category, ...post.data.tags],
-      author: post.data.authors?.join(',') ?? 'Usman Kolawole',
       customData: post.data.updatedDate
         ? `<updated>${post.data.updatedDate.toISOString()}</updated>`
         : '',

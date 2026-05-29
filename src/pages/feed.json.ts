@@ -24,7 +24,6 @@ export async function GET(context: APIContext) {
       summary: post.data.description,
       date_published: post.data.pubDate.toISOString(),
       date_modified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
-      authors: [{ name: post.data.authors?.join(', ') ?? 'Your Name' }],
       tags: [post.data.category, ...post.data.tags],
     })),
   };
