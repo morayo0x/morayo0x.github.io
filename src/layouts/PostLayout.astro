@@ -34,9 +34,8 @@ const {
   ogImage,
 } = post.data;
 
-const categoryLabel = { reflections: 'rRflections', projects: 'Projects' }[category];
+const categoryLabel = { reflections: 'Reflections', projects: 'Projects' }[category];
 const hasToc = toc && headings.filter((h) => h.depth <= 3).length > 2;
-// const isResearch = category === 'research';
 ---
 
 <BaseLayout
@@ -71,8 +70,6 @@ const hasToc = toc && headings.filter((h) => h.depth <= 3).length > 2;
 
       <div class="post-byline">
         <div class="byline-left">
-          <!-- <span class="byline-author">{authors?.join(', ') ?? 'Your Name'}</span> -->
-          <!-- <span class="byline-sep" aria-hidden="true">·</span> -->
           <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
           {
             updatedDate && (
@@ -115,33 +112,6 @@ const hasToc = toc && headings.filter((h) => h.depth <= 3).length > 2;
           )
         }
       </div>
-
-      <!-- {
-        isResearch && (doi || arxiv) && (
-          <div class="research-links">
-            {doi && (
-              <a
-                href={`https://doi.org/${doi}`}
-                target="_blank"
-                rel="noopener"
-                class="research-link"
-              >
-                DOI: {doi}
-              </a>
-            )}
-            {arxiv && (
-              <a
-                href={`https://arxiv.org/abs/${arxiv}`}
-                target="_blank"
-                rel="noopener"
-                class="research-link"
-              >
-                arXiv: {arxiv}
-              </a>
-            )}
-          </div>
-        )
-      } -->
 
       {
         coverImage && (
@@ -215,10 +185,6 @@ const hasToc = toc && headings.filter((h) => h.depth <= 3).length > 2;
 </BaseLayout>
 
 <style>
-  /* ── The single centered column ─────────────────────────────────────────
-     Everything lives inside .page-wrap.
-     max-width + auto margins = centered on all screen sizes.
-  ── */
   .page-wrap {
     width: 100%;
     max-width: 52rem;
