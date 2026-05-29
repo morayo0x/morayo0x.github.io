@@ -1,0 +1,37 @@
+# .github/workflows/ci.yml
+# Runs on every pull request and push to non-main branches.
+# Checks: TypeScript, build validity, formatting.
+
+name: CI Checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches-ignore: [main]
+
+jobs:
+  check:
+    name: Type check & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Astro type check
+        run: npx astro check
+
+      - name: Build (validates all pages render)
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Check formatting
+        run: npx prettier --check "src/**/*.{astro,ts,tsx,js,css,md,mdx}"

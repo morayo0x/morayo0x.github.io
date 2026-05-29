@@ -1,0 +1,54 @@
+---
+// src/components/blog/PostList.astro
+import PostCard from './PostCard.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  posts: CollectionEntry<'writing'>[];
+  showCategory?: boolean;
+  compact?: boolean;
+  emptyMessage?: string;
+}
+
+const {
+  posts,
+  showCategory = true,
+  compact = false,
+  emptyMessage = 'No posts found.',
+} = Astro.props;
+---
+
+{posts.length > 0
+  ? (
+    <div class="post-list" role="list">
+      {posts.map(post => (
+        <div
+          role="listitem"
+          class="filterable-item"
+          data-title={post.data.title.toLowerCase()}
+          data-tags={post.data.tags.join(' ').toLowerCase()}
+        >
+          <PostCard post={post} showCategory={showCategory} compact={compact} />
+        </div>
+      ))}
+    </div>
+  )
+  : (
+    <p class="post-list-empty">{emptyMessage}</p>
+  )
+}
+
+<style>
+  .post-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post-list-empty {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-text-subtle);
+    text-align: center;
+    padding: 4rem 0;
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+// src/components/blog/CategoryBadge.astro
+
+interface Props {
+  category: 'reflections' | 'projects';
+  linked?: boolean;
+}
+
+const { category, linked = true } = Astro.props;
+
+const labels = {
+  reflections: 'Reflections',
+  projects: 'Projects',
+};
+
+const label = labels[category];
+const href = `/writing/${category}/`;
+---
+
+{
+  linked ? (
+    <a href={href} class={`category-badge category-${category}`}>
+      {label}
+    </a>
+  ) : (
+    <span class={`category-badge category-${category}`}>{label}</span>
+  )
+}

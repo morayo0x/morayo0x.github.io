@@ -1,0 +1,44 @@
+---
+// src/components/ui/Callout.astro
+// Usage in MDX
+// <Callout type='note' | 'tip' | 'warning' | 'danger' title='name of the callout'>
+interface Props {
+  type?: 'note' | 'tip' | 'warning' | 'danger';
+  title?: string;
+}
+
+const { type = 'note', title } = Astro.props;
+
+const icons = {
+  note: '💡',
+  tip: '✨',
+  warning: '⚠️',
+  danger: '🚨',
+};
+
+const defaultTitles = {
+  note: 'Note',
+  tip: 'Tip',
+  warning: 'Warning',
+  danger: 'Danger',
+};
+---
+
+<div class={`callout callout-${type}`} role="note">
+  <p class="callout-title">
+    <span aria-hidden="true">{icons[type]}</span>
+    {title ?? defaultTitles[type]}
+  </p>
+  <div class="callout-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .callout-content :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  .callout-content :global(p:first-child) {
+    margin-top: 0;
+  }
+</style>

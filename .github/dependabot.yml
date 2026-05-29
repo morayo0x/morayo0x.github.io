@@ -1,0 +1,41 @@
+# .github/dependabot.yml
+# Keeps GitHub Actions and npm dependencies up to date automatically.
+# Creates PRs weekly — review and merge manually.
+
+version: 2
+updates:
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+  # npm packages
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
+      - "npm"
+    # Group all minor/patch updates together to reduce PR noise
+    groups:
+      astro-ecosystem:
+        patterns:
+          - "astro"
+          - "@astrojs/*"
+      remark-rehype:
+        patterns:
+          - "remark-*"
+          - "rehype-*"
+          - "mdast-*"
+          - "hast-*"
+    # Don't open PRs for major version bumps without review
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

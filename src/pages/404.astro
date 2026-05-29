@@ -1,0 +1,105 @@
+---
+// src/pages/404.astro
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="404 — Page Not Found"
+  description="This page doesn't exist."
+  noindex={true}
+>
+  <div class="not-found">
+    <div class="container">
+      <div class="not-found-inner">
+        <p class="not-found-code" aria-hidden="true">404</p>
+        <h1 class="not-found-title">Page not found</h1>
+        <p class="not-found-desc">
+          This page doesn't exist or has moved.
+        </p>
+        <div class="not-found-actions">
+          <a href="/" class="btn-primary-link">← Go home</a>
+          <a href="/writing/" class="btn-ghost-link">Browse writing</a>
+          <a href="/search/" class="btn-ghost-link">Search</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    padding: 5rem 0;
+  }
+
+  .not-found-inner {
+    max-width: 32rem;
+  }
+
+  .not-found-code {
+    font-family: var(--font-mono);
+    font-size: 5rem;
+    font-weight: 700;
+    color: var(--color-border-strong);
+    line-height: 1;
+    margin: 0 0 1rem;
+    letter-spacing: -0.04em;
+  }
+
+  .not-found-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--color-text);
+    margin: 0 0 0.75rem;
+  }
+
+  .not-found-desc {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.0625rem;
+    color: var(--color-text-muted);
+    margin: 0 0 2rem;
+  }
+
+  .not-found-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary-link {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: white;
+    background: var(--color-accent);
+    padding: 0.55rem 1.1rem;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    transition: background var(--transition-fast);
+  }
+
+  .btn-primary-link:hover { background: var(--color-accent-hover); }
+
+  .btn-ghost-link {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border-strong);
+    padding: 0.55rem 1.1rem;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    transition: color var(--transition-fast), background var(--transition-fast);
+  }
+
+  .btn-ghost-link:hover {
+    color: var(--color-text);
+    background: var(--color-bg-elevated);
+  }
+</style>

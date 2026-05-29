@@ -1,0 +1,156 @@
+---
+// src/pages/writing/[category]/index.astro
+import { getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PostCard from '@components/blog/PostCard.astro';
+// import { formatDate } from '@utils/content';
+
+export async function getStaticPaths() {
+  const categories = ['reflections', 'projects'] as const;
+
+  return categories.map((category) => ({
+    params: { category },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.props;
+
+const allPosts = await getCollection(
+  'writing',
+  ({ data }) => !data.draft && data.category === category
+);
+
+const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const meta = {
+  reflections: {
+    title: 'Reflections',
+    description: 'Personal essays, observations, and ideas on life, work, and thinking.',
+    icon: '◈',
+  },
+
+  projects: {
+    title: 'Projects',
+    description: "Build logs, experiments, tools, and things I've made.",
+    icon: '◉',
+  },
+}[category];
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <div class="category-page">
+    <div class="container">
+      <header class="page-header">
+        <div class="page-header-top">
+          <a href="/writing/" class="back-crumb">Writing</a>
+          <span aria-hidden="true">/</span>
+          <span class="current-crumb">{meta.title}</span>
+        </div>
+
+        <div class="page-header-main">
+          <span class="page-icon" aria-hidden="true">{meta.icon}</span>
+          <div>
+            <h1 class="page-title">{meta.title}</h1>
+            <p class="page-desc">{meta.description}</p>
+          </div>
+        </div>
+
+        <p class="post-count">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
+      </header>
+
+      <div class="post-list">
+        {posts.map((post) => <PostCard post={post} showCategory={false} />)}
+      </div>
+
+      {posts.length === 0 && <p class="empty">Nothing here yet — check back soon.</p>}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .category-page {
+    padding-bottom: 5rem;
+  }
+
+  .page-header {
+    padding: 3rem 0 2.5rem;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 2rem;
+  }
+
+  .page-header-top {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    color: var(--color-text-subtle);
+    margin-bottom: 1.5rem;
+  }
+
+  .back-crumb {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .back-crumb:hover {
+    color: var(--color-accent);
+  }
+  .current-crumb {
+    color: var(--color-text-subtle);
+  }
+
+  .page-header-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .page-icon {
+    font-size: 1.75rem;
+    color: var(--color-accent);
+    line-height: 1.3;
+    flex-shrink: 0;
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--color-text);
+    margin: 0 0 0.375rem;
+  }
+
+  .page-desc {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-text-muted);
+    font-size: 1.0625rem;
+    margin: 0;
+    max-width: 55ch;
+  }
+
+  .post-count {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    color: var(--color-text-subtle);
+    margin: 0;
+  }
+
+  .post-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .empty {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-text-subtle);
+    text-align: center;
+    padding: 4rem 0;
+  }
+</style>

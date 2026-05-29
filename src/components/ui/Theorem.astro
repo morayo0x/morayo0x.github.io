@@ -1,0 +1,28 @@
+---
+// src/components/ui/Theorem.astro
+interface Props {
+  type?: 'theorem' | 'lemma' | 'definition' | 'corollary' | 'proof' | 'remark';
+  number?: string;
+  title?: string;
+}
+
+const { type = 'theorem', number, title } = Astro.props;
+
+const label = type.charAt(0).toUpperCase() + type.slice(1);
+---
+
+<div class={`theorem-block theorem-${type}`}>
+  <p class="theorem-label">
+    {label}{number ? ` ${number}` : ''}{title ? ` (${title})` : ''}
+  </p>
+  <div class="theorem-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .theorem-proof .theorem-label::before { content: '∎ '; }
+
+  .theorem-body :global(p:last-child) { margin-bottom: 0; }
+  .theorem-body :global(p:first-child) { margin-top: 0; }
+</style>

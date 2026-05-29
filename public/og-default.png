@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#17120e"/>
+
+  <!-- Subtle grid texture -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2e2419" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.5"/>
+
+  <!-- Accent bar -->
+  <rect x="80" y="80" width="4" height="470" rx="2" fill="#338480"/>
+
+  <!-- Name -->
+  <text
+    x="120"
+    y="200"
+    font-family="Georgia, serif"
+    font-size="72"
+    font-weight="700"
+    fill="#e6e2d8"
+    letter-spacing="-2"
+  >Your Name</text>
+
+  <!-- Dot accent -->
+  <circle cx="570" cy="175" r="8" fill="#338480"/>
+
+  <!-- Tagline -->
+  <text
+    x="120"
+    y="270"
+    font-family="Georgia, serif"
+    font-size="28"
+    fill="#8c7f63"
+    font-style="italic"
+  >Writing, research, and projects.</text>
+
+  <!-- Separator -->
+  <rect x="120" y="310" width="960" height="1" fill="#2e2419"/>
+
+  <!-- Site URL -->
+  <text
+    x="120"
+    y="490"
+    font-family="monospace"
+    font-size="22"
+    fill="#4da09a"
+    letter-spacing="1"
+  >yourusername.github.io</text>
+
+  <!-- Decorative corner marks -->
+  <text x="80" y="580" font-family="monospace" font-size="14" fill="#2e2419">◈</text>
+  <text x="1100" y="580" font-family="monospace" font-size="14" fill="#2e2419">◈</text>
+</svg>

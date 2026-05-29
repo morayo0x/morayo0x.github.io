@@ -1,0 +1,121 @@
+---
+// src/components/blog/SeriesNav.astro
+import { getSeries } from '@utils/content';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'writing'>;
+}
+
+const { post } = Astro.props;
+const { series } = post.data;
+
+if (!series) return;
+
+const seriesPosts = await getSeries(series);
+---
+
+{
+  seriesPosts.length > 1 && (
+    <aside class="series-nav" aria-labelledby="series-nav-heading">
+      <p class="series-label" id="series-nav-heading">
+        <span aria-hidden="true">◈</span>
+        Series: {series}
+      </p>
+      <ol class="series-list" role="list">
+        {seriesPosts.map((p, i) => {
+          const isCurrent = p.id.replace(/\.md$/, '') === post.id.replace(/\.md$/, '');
+          return (
+            <li class={`series-item ${isCurrent ? 'series-item--current' : ''}`}>
+              <span class="series-num">{i + 1}</span>
+              {isCurrent ? (
+                <span class="series-title series-title--current">{p.data.title}</span>
+              ) : (
+                <a href={`/writing/${p.id.replace(/\.md$/, '')}/`} class="series-title">
+                  {p.data.title}
+                </a>
+              )}
+              {isCurrent && <span class="series-you-are-here">← you are here</span>}
+            </li>
+          );
+        })}
+      </ol>
+    </aside>
+  )
+}
+
+<style>
+  .series-nav {
+    border: 1px solid var(--color-accent-light);
+    border-radius: 0.5rem;
+    padding: 1.25rem 1.5rem;
+    margin: 2.5rem 0;
+    background: var(--color-accent-subtle);
+  }
+
+  .series-label {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .series-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .series-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.625rem;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+  }
+
+  .series-num {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-faint);
+    width: 1.25rem;
+    flex-shrink: 0;
+    text-align: right;
+  }
+
+  .series-title {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    line-height: 1.4;
+    transition: color var(--transition-fast);
+  }
+
+  .series-title:hover {
+    color: var(--color-accent);
+  }
+
+  .series-title--current {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .series-you-are-here {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-accent);
+    margin-left: 0.25rem;
+  }
+
+  .series-item--current .series-num {
+    color: var(--color-accent);
+  }
+</style>

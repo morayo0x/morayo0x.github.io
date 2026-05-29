@@ -1,0 +1,439 @@
+---
+// src/pages/about.astro
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About"
+  description="About Usman — student researcher, writer, and builder based in Lagos, Nigeria."
+>
+  <div class="page-wrap">
+    <!-- ── Sidebar ── -->
+    <aside class="about-sidebar">
+      <div class="profile-photo">
+        <div class="photo-placeholder" aria-hidden="true">UK</div>
+      </div>
+
+      <div class="sidebar-section">
+        <p class="sidebar-label">Location</p>
+        <p class="sidebar-value">Lagos, Nigeria</p>
+      </div>
+
+      <div class="sidebar-section">
+        <p class="sidebar-label">Interests</p>
+        <p class="sidebar-value">Machine Learning · Theory of Computation · Writing</p>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-section">
+        <p class="sidebar-label">Links</p>
+        <ul class="sidebar-links-list" role="list">
+          <li>
+            <a
+              href="https://github.com/morayo0x"
+              target="_blank"
+              rel="noopener"
+              class="sidebar-link">GitHub</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://twitter.com/morayo0x"
+              target="_blank"
+              rel="noopener"
+              class="sidebar-link">Twitter / X</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-divider"></div>
+    </aside>
+
+    <!-- ── Main content ── -->
+    <main class="about-content">
+      <header class="about-header">
+        <h1 class="about-title">About</h1>
+      </header>
+
+      <section id="bio" class="about-section">
+        <h2>Hello</h2>
+        <p>
+          I'm <strong>Usman</strong> — a fourth-year Computer Science student at the University of Lagos
+          (UNILAG). Previously, I studied Physics at the University of Ibadan (UI), where I developed
+          a deeper appreciation for mathematical thinking and the search for underlying principles.
+        </p>
+        <p>
+          My main interests are machine learning and the theory of computation; particularly the
+          mathematical foundations of learning and how models actually acquire structure,
+          representation, and generalization from data.
+        </p>
+        <p>
+          Outside of research and study, I spend a lot of time building personal systems, writing,
+          walking, reading.
+        </p>
+        <p>
+          I admire the works of Frédéric Chopin and Erik Satie for the emotional and philosophical
+          depth of their compositions.
+        </p>
+        <p>
+          I also greatly admire Fyodor Dostoevsky — particularly his understanding of the human
+          condition and the way he captured psychological conflict, suffering, faith, and
+          consciousness in writing.
+        </p>
+      </section>
+
+      <section id="how-i-think" class="about-section">
+        <h2>How I think</h2>
+        <p>
+          I'm drawn to first principles. I find it unsatisfying to use a tool I don't understand, or
+          to accept a result I can't derive. This slows me down sometimes. I think it's worth it.
+        </p>
+        <p>
+          I tend to work in cycles — periods of intense focus followed by reflection and
+          consolidation. I've learned to work with this rhythm rather than against it.
+        </p>
+      </section>
+
+      <section id="now" class="about-section">
+        <h2>Currently</h2>
+        <div class="now-list">
+          <div class="now-item">
+            <span class="now-icon">⌬</span>
+            <div class="now-text">
+              <p class="now-main">Interning at AIRLAB</p>
+              <p class="now-sub">Artificial Intelligence and Robotics Lab · University of Lagos</p>
+            </div>
+          </div>
+          <div class="now-item">
+            <span class="now-icon">∂</span>
+            <div class="now-text">
+              <p class="now-main">Mathematical foundations of machine learning</p>
+              <p class="now-sub">
+                Working from first principles — analysis, linear algebra, probability
+              </p>
+            </div>
+          </div>
+          <div class="now-item">
+            <span class="now-icon">✦</span>
+            <div class="now-text">
+              <p class="now-main">Writing regularly</p>
+              <p class="now-sub">Documenting the journey and clarifying thinking in public</p>
+            </div>
+          </div>
+
+          <div class="now-item">
+            <span class="now-icon">᳁</span>
+            <div class="now-text">
+              <p class="now-main">Reading</p>
+              <p class="now-sub"><em>Notes from the End of Everything</em></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ── Outer wrapper ── */
+  .page-wrap {
+    width: 100%;
+    max-width: 64rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3rem 1.5rem 5rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .page-wrap {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .page-wrap {
+      display: grid;
+      grid-template-columns: 1fr 16rem;
+      grid-template-areas: 'content sidebar';
+      gap: 5rem;
+      align-items: start;
+    }
+  }
+
+  /* ── Sidebar ── */
+  .about-sidebar {
+    grid-area: sidebar;
+  }
+
+  @media (min-width: 900px) {
+    .about-sidebar {
+      position: sticky;
+      top: 5rem;
+    }
+  }
+
+  .profile-photo {
+    margin-bottom: 1.5rem;
+  }
+
+  .photo-placeholder {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: white;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .profile-img {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .sidebar-section {
+    margin-bottom: 1.25rem;
+  }
+
+  .sidebar-label {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+    margin: 0 0 0.25rem;
+  }
+
+  .sidebar-value {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .sidebar-link {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  .sidebar-link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .sidebar-divider {
+    height: 1px;
+    background: var(--color-border);
+    margin: 1.25rem 0;
+  }
+
+  .sidebar-links-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  /* ── Main content ── */
+  .about-content {
+    grid-area: content;
+    min-width: 0;
+  }
+
+  .about-header {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 2.5rem;
+  }
+
+  .about-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  /* ── Sections ── */
+  .about-section {
+    margin-bottom: 3rem;
+    font-family: var(--font-serif);
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+
+  .about-section h2 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    margin: 0 0 0.875rem;
+    border: none;
+    text-decoration: none;
+    padding: 0;
+  }
+
+  .about-section p {
+    margin: 0 0 1.25rem;
+  }
+
+  .about-section p:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-section ul {
+    margin: 0 0 1.25rem 1.25rem;
+    padding: 0;
+  }
+
+  .about-section li {
+    margin-bottom: 0.4rem;
+  }
+
+  .about-section a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
+    text-underline-offset: 3px;
+    font-weight: 500;
+    transition:
+      color var(--transition-fast),
+      text-decoration-color var(--transition-fast);
+  }
+  .about-section a:hover {
+    color: var(--color-accent-hover);
+    text-decoration-color: var(--color-accent);
+  }
+
+  /* ── Coda ── */
+  .about-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .about-coda {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    margin: 0 0 0.35rem;
+  }
+
+  .about-coda--sub {
+    font-size: 0.875rem;
+    color: var(--color-text-subtle);
+  }
+
+  .about-coda--end {
+    font-size: 0.8125rem;
+    color: var(--color-text-faint);
+    margin-top: 0.15rem;
+  }
+
+  /* ── Mobile sidebar ── */
+  @media (max-width: 899px) {
+    .about-sidebar {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.5rem 2rem;
+      align-items: start;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .profile-photo {
+      margin-bottom: 0;
+      grid-row: 1 / 3;
+    }
+
+    .sidebar-divider {
+      display: none;
+    }
+  }
+
+  @media (min-width: 480px) {
+    .about-sidebar {
+      grid-template-columns: 1fr;
+    }
+    .profile-photo {
+      grid-row: auto;
+    }
+    .sidebar-links-list {
+      flex-direction: row;
+    }
+  }
+
+  /* ── Currently ── */
+  .now-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 1.25rem;
+  }
+
+  .now-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .now-item:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .now-icon {
+    font-size: 1.2rem;
+    color: var(--color-accent);
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+    width: 1.25rem;
+    text-align: center;
+    font-style: normal;
+  }
+
+  .now-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .now-main {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .now-sub {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+</style>

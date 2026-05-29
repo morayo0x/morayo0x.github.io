@@ -1,0 +1,29 @@
+{
+  "recommendations": [
+    // Core
+    "astro-build.astro-vscode",
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+
+    // Markdown & MDX
+    "unifiedjs.vscode-mdx",
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+
+    // Writing quality
+    "streetsidesoftware.code-spell-checker",
+    "valentjn.vscode-ltex",
+
+    // Git
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+
+    // TypeScript
+    "dbaeumer.vscode-eslint",
+
+    // Productivity
+    "usernamehw.errorlens",
+    "christian-kohler.path-intellisense",
+    "formulahendry.auto-rename-tag"
+  ]
+}

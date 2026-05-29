@@ -1,0 +1,42 @@
+---
+// src/components/blog/ReadingTime.astro
+
+interface Props {
+  minutesRead: string | undefined;
+  class?: string;
+}
+
+const { minutesRead, class: className = '' } = Astro.props;
+---
+
+{minutesRead && (
+  <span class={`reading-time ${className}`} aria-label={`Estimated reading time: ${minutesRead}`}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12 6 12 12 16 14"/>
+    </svg>
+    {minutesRead}
+  </span>
+)}
+
+<style>
+  .reading-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    color: var(--color-text-subtle);
+  }
+</style>

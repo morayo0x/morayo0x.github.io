@@ -1,0 +1,149 @@
+---
+// src/components/ui/SearchBar.astro
+// Lightweight client-side filter — filters a list of .filterable-item elements
+// by their data-title and data-tags attributes. No external deps.
+// Usage: place above a list of items that have data-title and data-tags attrs.
+
+interface Props {
+  placeholder?: string;
+  targetSelector?: string; // CSS selector for the items to filter
+}
+
+const {
+  placeholder = 'Filter…',
+  targetSelector = '.filterable-item',
+} = Astro.props;
+
+const id = `search-bar-${Math.random().toString(36).slice(2, 7)}`;
+---
+
+<div class="search-bar-wrapper">
+  <label for={id} class="sr-only">{placeholder}</label>
+  <div class="search-bar-inner">
+    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+    </svg>
+    <input
+      id={id}
+      type="search"
+      class="search-bar-input"
+      placeholder={placeholder}
+      autocomplete="off"
+      spellcheck="false"
+      data-target={targetSelector}
+    />
+    <kbd class="search-shortcut" aria-hidden="true">/</kbd>
+  </div>
+</div>
+
+<script>
+  const inputs = document.querySelectorAll<HTMLInputElement>('.search-bar-input');
+
+  inputs.forEach(input => {
+    const selector = input.dataset.target ?? '.filterable-item';
+
+    const filter = () => {
+      const q = input.value.trim().toLowerCase();
+      const items = document.querySelectorAll<HTMLElement>(selector);
+      let visible = 0;
+
+      items.forEach(item => {
+        const title = (item.dataset.title ?? item.textContent ?? '').toLowerCase();
+        const tags  = (item.dataset.tags ?? '').toLowerCase();
+        const match = !q || title.includes(q) || tags.includes(q);
+        item.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+
+      // Update count if present
+      const countEl = document.querySelector('[data-filter-count]') as HTMLElement | null;
+      if (countEl) countEl.textContent = String(visible);
+    };
+
+    input.addEventListener('input', filter);
+
+    // '/' shortcut to focus
+    document.addEventListener('keydown', e => {
+      if (e.key === '/' && document.activeElement?.tagName !== 'INPUT') {
+        e.preventDefault();
+        input.focus();
+        input.select();
+      }
+    });
+
+    // Escape to clear
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        input.value = '';
+        filter();
+        input.blur();
+      }
+    });
+  });
+</script>
+
+<style>
+  .search-bar-wrapper {
+    margin-bottom: 1.5rem;
+  }
+
+  .search-bar-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 0.875rem;
+    color: var(--color-text-subtle);
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+
+  .search-bar-input {
+    width: 100%;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    color: var(--color-text);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-strong);
+    border-radius: 0.5rem;
+    padding: 0.625rem 2.75rem 0.625rem 2.5rem;
+    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    -webkit-appearance: none;
+  }
+
+  .search-bar-input::placeholder {
+    color: var(--color-text-faint);
+  }
+
+  .search-bar-input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 15%, transparent);
+  }
+
+  /* Hide browser's native 'x' clear button */
+  .search-bar-input::-webkit-search-cancel-button { display: none; }
+
+  .search-shortcut {
+    position: absolute;
+    right: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-text-faint);
+    background: var(--color-bg-sunken);
+    border: 1px solid var(--color-border);
+    border-radius: 0.25rem;
+    padding: 0.1rem 0.35rem;
+    pointer-events: none;
+    line-height: 1.4;
+  }
+
+  .search-bar-input:focus + .search-shortcut {
+    display: none;
+  }
+</style>

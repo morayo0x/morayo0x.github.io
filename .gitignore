@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+.output/
+
+# Astro cache
+.astro/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Pagefind (generated at build time — don't commit)
+src/pagefind/
+public/pagefind/
+
+# Templates
+src/content/_templates* 
+
+# Drafts
+
+src/drafts*

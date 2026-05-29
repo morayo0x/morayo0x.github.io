@@ -1,0 +1,73 @@
+---
+// src/components/blog/PostCard.astro
+import TagList from './TagList.astro';
+import { formatDate } from '@utils/content';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'writing'>;
+  compact?: boolean;
+  showCategory?: boolean;
+}
+
+const { post, compact = false, showCategory = true } = Astro.props;
+const { title, description, pubDate, category, tags, minutesRead } = post.data;
+const href = `/writing/${post.id.replace(/\.md$/, '')}/`;
+const categoryLabel = { reflections: 'Reflections', projects: 'Projects' }[category];
+---
+
+<a href={href} class={`post-card ${compact ? 'post-card--compact' : ''}`}>
+  <article>
+    {
+      showCategory && (
+        <div class="post-card-eyebrow">
+          <span class={`category-badge category-${category}`}>{categoryLabel}</span>
+        </div>
+      )
+    }
+
+    <h2 class="post-card-title">{title}</h2>
+
+    {!compact && <p class="post-card-description">{description}</p>}
+
+    <div class="post-card-meta">
+      <time datetime={pubDate.toISOString()}>{formatDate(pubDate, 'short')}</time>
+      {
+        minutesRead && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>{minutesRead}</span>
+          </>
+        )
+      }
+    </div>
+
+    {
+      !compact && tags.length > 0 && (
+        <div class="post-card-tags">
+          <TagList tags={tags.slice(0, 3)} />
+        </div>
+      )
+    }
+  </article>
+</a>
+
+<style>
+  .post-card-eyebrow {
+    margin-bottom: 0.5rem;
+    background-color: #eeecea;
+  }
+
+  html.dark .post-card-eyebrow {
+    background-color: #17120e;
+  }
+
+  /* applies to tags in the home page */
+  .post-card-tags {
+    display: none;
+  }
+
+  .post-card--compact .post-card-title {
+    font-size: 1.0625rem;
+  }
+</style>

@@ -1,0 +1,71 @@
+---
+// src/components/layout/Footer.astro
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <p class="footer-tagline">
+          for progress, and beauty; for it is in becoming that beauty reveals itself.
+        </p>
+        <br />
+        <p class="footer-tagline">
+          beauty is not merely appearance, but the visible trace of meaningful progress. and to
+          understand deeply is already a form of making.
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 6rem;
+    border-top: 1px solid var(--color-border);
+    padding: 3rem 0 2rem;
+    background: var(--color-bg);
+  }
+
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  @media (max-width: 640px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  .footer-name {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 0.25rem;
+  }
+
+  .footer-tagline {
+    font-family: var(--font-serif);
+    font-size: 0.9375rem;
+    color: var(--color-text-subtle);
+    margin: 0;
+    font-style: italic;
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 3rem;
+  }
+
+  @media (max-width: 640px) {
+    .footer-nav {
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+  }
+</style>

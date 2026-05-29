@@ -1,0 +1,58 @@
+---
+// src/layouts/BaseLayout.astro
+import BaseHead from '@components/layout/BaseHead.astro';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+import '@styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: 'website' | 'article';
+  math?: boolean;
+  pubDate?: Date;
+  updatedDate?: Date;
+  canonicalURL?: string;
+  noindex?: boolean;
+}
+
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <BaseHead {...props} />
+  </head>
+  <body>
+    <!-- Skip to main content (accessibility) -->
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <!-- Reading progress bar (shown on long-form pages) -->
+    <div id="reading-progress" role="progressbar" aria-hidden="true" style="width:0%"></div>
+
+    <Header />
+
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <!-- Reading progress script -->
+    <script>
+      const bar = document.getElementById('reading-progress');
+      if (bar) {
+        const updateProgress = () => {
+          const scrollTop = window.scrollY;
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+          bar.style.width = `${pct}%`;
+        };
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        updateProgress();
+      }
+    </script>
+  </body>
+</html>
