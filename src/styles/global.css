@@ -1,28 +1,8 @@
 /* ─── src/styles/global.css ─────────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
 @import 'tailwindcss';
-/* @import 'tailwindcss/preflight' layer(base);
-@import 'tailwindcss/utilities' layer(utilities); */
 
-/* @import 'tailwindcss/theme.css' layer(theme);
-@import 'tailwindcss/preflight.css' layer(base);
-@import 'tailwindcss/utilities.css' layer(utilities); */
-
-/* ─── Font Imports ─────────────────────────────────────────────────────────
-   Using Google Fonts for simplicity. For self-hosting (recommended for
-   performance + privacy), download from fontsource.org:
-   npm install @fontsource/lora @fontsource/dm-sans @fontsource/playfair-display
-   npm install @fontsource/jetbrains-mono
-*/
-
-/* ─── CSS Custom Properties ────────────────────────────────────────────────
-   Design tokens as CSS variables. All components reference these.
-   Overridden in [data-theme="dark"] or .dark class.
-*/
 :root {
   /* Colors */
   --color-bg: #faf9f7;
@@ -63,31 +43,27 @@
   --shadow-lg: 0 8px 24px rgb(0 0 0 / 0.1), 0 4px 8px rgb(0 0 0 / 0.06);
 }
 
-/* ─── Dark Mode ─────────────────────────────────────────────────────────── */
-/* .dark .post-card-eyebrow { */
-/* background: none; */
-/* } */
-/* #17120e */
+/* ─── Dark Mode — Pure & Minimal ────────────────────────────────────────── */
 .dark {
-  --color-bg: #17120e;
-  --color-bg-elevated: #1f1812;
-  --color-bg-sunken: #130f0a;
-  --color-border: #2e2419;
-  --color-border-strong: #3d3527;
+  --color-bg: #111111;
+  --color-bg-elevated: #1a1a1a;
+  --color-bg-sunken: #0a0a0a;
+  --color-border: #222222;
+  --color-border-strong: #333333;
 
-  --color-text: #e6e2d8;
-  --color-text-muted: #b3a98f;
-  --color-text-subtle: #8c7f63;
-  --color-text-faint: #564b38;
+  --color-text: #f0f0f0;
+  --color-text-muted: #999999;
+  --color-text-subtle: #666666;
+  --color-text-faint: #444444;
 
-  --color-accent: #4da09a;
-  --color-accent-hover: #7dc0b8;
-  --color-accent-light: #1c3938;
-  --color-accent-subtle: #0a2323;
+  --color-accent: #aaaaaa;
+  --color-accent-hover: #cccccc;
+  --color-accent-light: #222222;
+  --color-accent-subtle: #1a1a1a;
 
-  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.4);
-  --shadow-lg: 0 8px 24px rgb(0 0 0 / 0.5);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 8px 24px rgb(0 0 0 / 0.6);
 }
 
 /* ─── Base Reset & Globals ──────────────────────────────────────────────── */
@@ -104,7 +80,6 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     scroll-behavior: smooth;
-    /* Prevent flash on theme load — see ThemeToggle script */
     color-scheme: light dark;
   }
 
@@ -120,20 +95,17 @@
       color var(--transition-slow);
   }
 
-  /* Smooth focus rings */
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
     border-radius: 2px;
   }
 
-  /* Selection */
   ::selection {
     background-color: var(--color-accent-light);
     color: var(--color-text);
   }
 
-  /* Scrollbar (webkit) */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -152,7 +124,6 @@
 
 /* ─── Component Layer ───────────────────────────────────────────────────── */
 @layer components {
-  /* Container */
   .container {
     width: 100%;
     max-width: var(--content-width);
@@ -169,7 +140,6 @@
     }
   }
 
-  /* ── Prose Overrides ──────────────────────────────────────────────────── */
   .prose {
     font-family: var(--font-serif);
     color: var(--color-text);
@@ -179,7 +149,6 @@
     color: var(--color-text);
   }
 
-  /* Anchor links on headings */
   .anchor-link {
     color: inherit;
     text-decoration: none;
@@ -203,7 +172,6 @@
   }
 
   /* ── Code Blocks ─────────────────────────────────────────────────────── */
-  /* Shiki dual-theme support */
   .astro-code,
   pre.astro-code {
     position: relative;
@@ -216,7 +184,6 @@
     margin: 1.75rem 0;
   }
 
-  /* Light/dark theme switching for Shiki */
   html:not(.dark) .shiki.dark,
   html:not(.dark) .shiki.vesper {
     display: none;
@@ -226,7 +193,6 @@
     display: none;
   }
 
-  /* Code block filename label */
   .code-filename {
     display: block;
     font-family: var(--font-mono);
@@ -418,7 +384,7 @@
   .tag:hover {
     background: var(--color-accent-light);
     color: var(--color-accent);
-    border-color: var(--color-accent-light);
+    border-color: var(--color-border-strong);
   }
 
   /* ── Category Badge ──────────────────────────────────────────────────── */
@@ -449,19 +415,23 @@
   .category-projects {
     background: var(--color-accent-subtle);
     color: var(--color-accent);
-    border: 1px solid rgb(from var(--color-accent) r g b / 0.2);
+    border: 1px solid var(--color-border-strong);
   }
 
   .dark .category-reflections {
     color: #fbbf24;
     background: rgb(251 191 36 / 0.08);
+    border-color: rgb(251 191 36 / 0.15);
   }
   .dark .category-research {
     color: #60a5fa;
     background: rgb(96 165 250 / 0.08);
+    border-color: rgb(96 165 250 / 0.15);
   }
   .dark .category-projects {
     color: var(--color-accent);
+    background: var(--color-accent-subtle);
+    border-color: var(--color-border-strong);
   }
 
   /* ── Navigation ──────────────────────────────────────────────────────── */
@@ -504,10 +474,6 @@
     margin: 1.5rem 0;
   }
 
-  /* ─── KaTeX: use MathML renderer, hide HTML renderer ───────────────────── */
-  /* KaTeX renders both HTML and MathML by default. The HTML renderer has      */
-  /* SVG conflicts with Tailwind's prose CSS (stretched radical lines etc).    */
-  /* MathML is natively supported in all modern browsers and renders correctly. */
   .katex-html {
     display: none;
   }
@@ -588,7 +554,6 @@
     border-color: var(--color-border);
   }
 
-  /* Visually hidden (accessible) */
   .sr-only {
     position: absolute;
     width: 1px;
@@ -601,7 +566,6 @@
     border-width: 0;
   }
 
-  /* Prevent FOUC for dark mode */
   .theme-transition-ready * {
     transition:
       background-color var(--transition-slow),
