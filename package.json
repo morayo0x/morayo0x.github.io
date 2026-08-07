@@ -41,7 +41,7 @@
     "eslint-plugin-astro": "^1.2.0",
     "husky": "^9.1.0",
     "lint-staged": "^15.2.0",
-    "prettier": "^3.3.0",
+    "prettier": "^3.8.4",
     "prettier-plugin-astro": "^0.14.0",
     "typescript": "^5.9.3",
     "vite": "^7.3.3"
