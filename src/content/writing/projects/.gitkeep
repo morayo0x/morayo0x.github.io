@@ -1,2 +1,0 @@
-# Keeps the collection directory in git so `npm run new:post` and the
-# glob loader in src/content.config.ts have somewhere to land.

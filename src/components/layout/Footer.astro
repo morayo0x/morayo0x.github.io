@@ -1,163 +1,71 @@
 ---
 // src/components/layout/Footer.astro
 const year = new Date().getFullYear();
-
-const columns = [
-  {
-    label: 'Writing',
-    links: [
-      { href: '/writing/', label: 'All writing' },
-      { href: '/writing/reflections/', label: 'Reflections' },
-      { href: '/writing/projects/', label: 'Projects' },
-      { href: '/search/', label: 'Search' },
-    ],
-  },
-  {
-    label: 'Elsewhere',
-    links: [
-      { href: '/about/', label: 'About' },
-      { href: 'https://github.com/morayo0x', label: 'GitHub', external: true },
-      { href: 'https://x.com/morayo0x', label: 'X', external: true },
-    ],
-  },
-  {
-    label: 'Feeds',
-    links: [
-      { href: '/rss.xml', label: 'RSS' },
-      { href: '/feed.json', label: 'JSON' },
-    ],
-  },
-];
 ---
 
 <footer class="site-footer">
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-left">
-        <p class="footer-name">Morayo Kolawole</p>
-        <p class="footer-tagline">
-          for progress, and beauty; for it is in becoming that beauty reveals itself.
-        </p>
-      </div>
-
-      <nav class="footer-nav" aria-label="Footer">
-        {
-          columns.map(({ label, links }) => (
-            <div class="footer-col">
-              <p class="footer-col-label">{label}</p>
-              <ul role="list">
-                {links.map(({ href, label: linkLabel, external }) => (
-                  <li>
-                    <a
-                      href={href}
-                      class="footer-link"
-                      target={external ? '_blank' : undefined}
-                      rel={external ? 'noopener' : undefined}
-                    >
-                      {linkLabel}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
-      </nav>
+  <div class="container footer-inner">
+    <p class="footer-line">
+      Nothing here is allowed to hold until it has been checked at both scales.
+    </p>
+    <div class="footer-links">
+      <a href="/by-date/" class="footer-link">By date</a>
+      <a href="/rss.xml" class="footer-link">RSS</a>
+      <a href="https://github.com/morayo0x" target="_blank" rel="noopener" class="footer-link"
+        >GitHub</a
+      >
+      <span class="footer-year">© {year}</span>
     </div>
-
-    <p class="footer-legal">© {year} Morayo Kolawole</p>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    margin-top: 6rem;
+    margin-top: 5rem;
     border-top: 1px solid var(--color-border);
-    padding: 3rem 0 2rem;
-    background: var(--color-bg);
   }
 
   .footer-inner {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 3rem;
-    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding-top: 1.5rem;
+    padding-bottom: 2.5rem;
   }
 
-  @media (max-width: 768px) {
-    .footer-inner {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
-  }
-
-  .footer-name {
-    font-family: var(--font-display);
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: var(--color-text);
-    margin: 0 0 0.375rem;
-    letter-spacing: -0.02em;
-  }
-
-  .footer-tagline {
+  .footer-line {
     font-family: var(--font-serif);
+    font-style: italic;
     font-size: 0.9375rem;
     color: var(--color-text-subtle);
     margin: 0;
-    font-style: italic;
-    max-width: 38ch;
+    max-width: 46ch;
   }
 
-  .footer-nav {
+  .footer-links {
     display: flex;
-    gap: 3rem;
+    align-items: baseline;
+    gap: 1.25rem;
   }
 
-  @media (max-width: 640px) {
-    .footer-nav {
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-  }
-
-  .footer-col ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  .footer-col-label {
-    font-family: var(--font-sans);
+  .footer-link,
+  .footer-year {
+    font-family: var(--font-mono);
     font-size: 0.6875rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-text-subtle);
-    margin: 0 0 0.75rem;
-  }
-
-  .footer-link {
-    font-family: var(--font-sans);
-    font-size: 0.875rem;
     color: var(--color-text-muted);
     text-decoration: none;
     transition: color var(--transition-fast);
   }
 
   .footer-link:hover {
-    color: var(--color-accent);
+    color: var(--color-text);
   }
 
-  .footer-legal {
-    font-family: var(--font-sans);
-    font-size: 0.8125rem;
-    color: var(--color-text-subtle);
-    margin: 0;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--color-border);
+  .footer-year {
+    color: var(--color-text-faint);
   }
 </style>

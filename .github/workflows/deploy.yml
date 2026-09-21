@@ -56,10 +56,6 @@ jobs:
           # Passed through to Astro for environment-specific behavior
           NODE_ENV: production
 
-      - name: Run Pagefind (search index)
-        run: npx pagefind --site dist
-        # This generates dist/pagefind/ — the search index served as static files
-
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

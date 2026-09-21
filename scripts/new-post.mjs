@@ -1,16 +1,43 @@
 #!/usr/bin/env node
 // scripts/new-post.mjs
 // Usage: npm run new:post
-// Creates a new draft post with correct frontmatter in the right directory.
+// Scaffolds a piece with the frontmatter the field needs.
 
 import fs from 'node:fs';
 import path from 'node:path';
 import readline from 'node:readline';
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-const ask = (q) => new Promise((res) => rl.question(q, res));
 
-// ─── Slugify ──────────────────────────────────────────────────────────────
+// readline delivers buffered lines faster than sequential awaits can register
+// their callbacks, so piped input would otherwise stall partway through.
+// Queue the lines instead and hand them out as they are asked for.
+const pending = [];
+const waiting = [];
+let ended = false;
+
+rl.on('line', (line) => {
+  const resolve = waiting.shift();
+  if (resolve) resolve(line);
+  else pending.push(line);
+});
+
+rl.on('close', () => {
+  ended = true;
+  while (waiting.length) waiting.shift()(null);
+});
+
+/** Resolves to the next line, or null once input is exhausted. */
+function ask(question) {
+  process.stdout.write(question);
+  if (pending.length) return Promise.resolve(pending.shift());
+  if (ended) return Promise.resolve(null);
+  return new Promise((resolve) => waiting.push(resolve));
+}
+
+const WRITING_DIR = path.join(process.cwd(), 'src/content/writing');
+const THREADS_DIR = path.join(process.cwd(), 'src/content/threads');
+
 function slugify(str) {
   return str
     .toLowerCase()
@@ -20,72 +47,33 @@ function slugify(str) {
     .replace(/^-+|-+$/g, '');
 }
 
-// ─── Date ────────────────────────────────────────────────────────────────
 function today() {
-  return new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  return new Date().toISOString().split('T')[0];
 }
 
-// ─── Templates ───────────────────────────────────────────────────────────
-// These must stay in step with the schema in src/content.config.ts.
-const templates = {
-  reflections: (title) => `---
-title: "${title}"
-description: ""
-pubDate: ${today()}
-category: reflections
-tags: []
-draft: true
-featured: false
-toc: false
-math: false
----
+function listThreads() {
+  if (!fs.existsSync(THREADS_DIR)) return [];
+  return fs
+    .readdirSync(THREADS_DIR)
+    .filter((f) => f.endsWith('.md'))
+    .map((f) => f.replace(/\.md$/, ''));
+}
 
-<!-- Write your reflection here -->
-`,
-
-  projects: (title) => `---
-title: "${title}"
-description: ""
-pubDate: ${today()}
-category: projects
-tags: []
-draft: true
-featured: false
-toc: true
-math: false
----
-
-import Callout from '@components/ui/Callout.astro';
-
-## Overview
-
-## Motivation
-
-## Implementation
-
-## Results
-
-## What I'd Do Differently
-`,
-};
-
-const VALID_TYPES = Object.keys(templates);
-
-// ─── Main ─────────────────────────────────────────────────────────────────
-async function main() {
-  console.log('\nNew post\n');
-
-  const type = (await ask(`Type? (${VALID_TYPES.join('/')}): `)).trim();
-
-  if (!VALID_TYPES.includes(type)) {
-    console.error(`Invalid type. Choose from: ${VALID_TYPES.join(', ')}`);
-    rl.close();
-    process.exitCode = 1;
-    return;
+/** Reads a number in 0–1, re-asking until it gets one. */
+async function askCoord(label, hint) {
+  for (;;) {
+    const raw = await ask(`${label} ${hint}: `);
+    if (raw === null) return null;
+    const n = Number(raw.trim());
+    if (raw.trim() !== '' && Number.isFinite(n) && n >= 0 && n <= 1) return n;
+    console.log('  Needs a number between 0 and 1.');
   }
+}
 
-  const title = (await ask('Title: ')).trim();
+async function main() {
+  console.log('\nNew piece\n');
 
+  const title = (await ask('Title: '))?.trim() ?? '';
   if (!title) {
     console.error('A title is required.');
     rl.close();
@@ -93,27 +81,61 @@ async function main() {
     return;
   }
 
-  const datePrefix = today();
+  const description = (await ask('One line: '))?.trim() ?? '';
+
+  console.log('\nPosition on the field. Both are judgement calls.');
+  const x = await askCoord('  x', '(0 = human scale, 1 = cosmic scale)');
+  const y = await askCoord('  y', '(0 = raw intuition, 1 = grounded)');
+
+  if (x === null || y === null) {
+    console.error('\nBoth coordinates are required.');
+    rl.close();
+    process.exitCode = 1;
+    return;
+  }
+
+  const threads = listThreads();
+  let thread = '';
+  if (threads.length > 0) {
+    console.log(`\nThreads: ${threads.join(', ')}`);
+    const answer = (await ask('Thread (blank for none): '))?.trim() ?? '';
+    if (answer && !threads.includes(answer)) {
+      console.log(`  No thread called "${answer}". Leaving it unthreaded.`);
+    } else {
+      thread = answer;
+    }
+  }
+
   const slug = slugify(title);
-  const ext = type === 'projects' ? '.mdx' : '.md';
-  const filename = `${datePrefix}-${slug}${ext}`;
-  const relDir = `src/content/writing/${type}`;
-  const dir = path.join(process.cwd(), relDir);
-  const filepath = path.join(dir, filename);
+  const filepath = path.join(WRITING_DIR, `${slug}.md`);
 
   if (fs.existsSync(filepath)) {
-    console.log(`Already exists: ${relDir}/${filename}`);
+    console.log(`\nAlready exists: src/content/writing/${slug}.md`);
     rl.close();
     return;
   }
 
-  // The collection directory is not guaranteed to exist yet.
-  fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(filepath, templates[type](title));
+  const frontmatter = [
+    '---',
+    `title: "${title.replace(/"/g, '\\"')}"`,
+    `description: "${description.replace(/"/g, '\\"')}"`,
+    `pubDate: ${today()}`,
+    'draft: true',
+    'math: false',
+    `x: ${x}`,
+    `y: ${y}`,
+    ...(thread ? [`thread: ${thread}`] : []),
+    '---',
+    '',
+    '',
+  ].join('\n');
 
-  console.log(`\nCreated: ${relDir}/${filename}`);
-  console.log(`URL:     /writing/${type}/${datePrefix}-${slug}/`);
-  console.log('\nSet draft: false when it is ready to publish.\n');
+  fs.mkdirSync(WRITING_DIR, { recursive: true });
+  fs.writeFileSync(filepath, frontmatter);
+
+  console.log(`\nCreated: src/content/writing/${slug}.md`);
+  console.log(`URL:     /writing/${slug}/`);
+  console.log('\nSet draft: false when it is ready.\n');
   rl.close();
 }
 
