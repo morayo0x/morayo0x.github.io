@@ -236,14 +236,31 @@ const span =
   .lead-card {
     display: block;
     border: 1px solid var(--color-border);
+    border-radius: 6px;
     background: var(--color-bg-elevated);
     padding: 1.5rem 1.75rem;
     text-decoration: none;
-    transition: border-color var(--transition-fast);
+    box-shadow: var(--lift-rest);
+    transform: translateY(0);
+    transition:
+      border-color var(--transition-fast),
+      box-shadow 200ms ease,
+      transform 200ms ease;
   }
 
   .lead-card:hover {
     border-color: var(--color-border-strong);
+    box-shadow: var(--lift-hover);
+    transform: translateY(-3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lead-card {
+      transition: border-color var(--transition-fast);
+    }
+    .lead-card:hover {
+      transform: none;
+    }
   }
 
   .lead-meta {

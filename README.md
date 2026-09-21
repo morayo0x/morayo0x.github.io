@@ -20,3 +20,6 @@ src/content/threads/   one file per thread; body is the thread's opening paragra
 
 `npm run new:post` scaffolds a piece with the right frontmatter. `/by-date/` is
 the plain list, and works without the plot.
+
+How to write a piece — frontmatter, the coordinates, threads, LaTeX — is in
+[WRITING.md](WRITING.md).

@@ -34,11 +34,15 @@ const {
 
 // Margins leave room for the axis names on all four sides.
 const m = axisLabels === 'none' ? 12 : axisLabels === 'short' ? 24 : 60;
+// The top axis name is drawn 10px above the frame, so the frame needs at
+// least that much clearance or the label is cut off by the viewBox.
+const topInset = axisLabels === 'none' ? 12 : Math.max(m - 20, 18);
+const bottomInset = axisLabels === 'none' ? 12 : 50;
 const box = {
   left: m,
-  top: m - 20 > 0 ? m - 20 : 16,
+  top: topInset,
   width: width - m * 2,
-  height: height - (m - 20 > 0 ? m - 20 : 16) - (axisLabels === 'none' ? 12 : 50),
+  height: height - topInset - bottomInset,
 };
 
 const midX = box.left + box.width / 2;

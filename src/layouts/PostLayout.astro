@@ -61,6 +61,24 @@ const nearby = nearest(post, all, 2);
 
         <h1 class="post-title">{title}</h1>
 
+        <div class="locator">
+          <div class="locator-plot">
+            <Field
+              posts={all}
+              threads={threads}
+              width={300}
+              height={220}
+              focus={post.id}
+              highlight={entry?.thread.id}
+              axisLabels="short"
+            />
+          </div>
+          <div class="locator-text">
+            <p class="label">Where this sits</p>
+            <p class="locator-note">{describePosition(x, y)}</p>
+          </div>
+        </div>
+
         <div class="prose">
           <slot />
         </div>
@@ -96,18 +114,6 @@ const nearby = nearest(post, all, 2);
       </article>
 
       <aside class="post-side">
-        <p class="label">Where this sits</p>
-        <Field
-          posts={all}
-          threads={threads}
-          width={320}
-          height={240}
-          focus={post.id}
-          highlight={entry?.thread.id}
-          axisLabels="short"
-        />
-        <p class="side-note">{describePosition(x, y)}</p>
-
         {
           nearby.length > 0 && (
             <div class="side-block">
@@ -180,7 +186,43 @@ const nearby = nearest(post, all, 2);
     line-height: 1.2;
     letter-spacing: -0.01em;
     color: var(--color-text);
-    margin: 0 0 2rem;
+    margin: 0 0 1.5rem;
+  }
+
+  /* ── Locator ── */
+  .locator {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin: 0 0 2.5rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .locator-plot {
+    flex-shrink: 0;
+    margin-left: -0.5rem;
+  }
+
+  .locator-text {
+    flex: 1;
+    min-width: 13rem;
+  }
+
+  .locator-text .label {
+    margin-bottom: 0.4rem;
+  }
+
+  .locator-note {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    margin: 0;
+    max-width: 38ch;
   }
 
   /* ── Prose ── */
@@ -340,20 +382,8 @@ const nearby = nearest(post, all, 2);
     margin-bottom: 0.875rem;
   }
 
-  .side-note {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    color: var(--color-text-muted);
-    margin: 1rem 0 0;
-    max-width: 38ch;
-  }
-
   .side-block {
-    margin-top: 1.75rem;
-    padding-top: 1.125rem;
-    border-top: 1px solid var(--color-border);
+    padding-top: 0.5rem;
   }
 
   .side-link {
@@ -386,6 +416,9 @@ const nearby = nearest(post, all, 2);
   }
 
   @media (max-width: 560px) {
+    .locator {
+      gap: 1rem;
+    }
     .post-nav {
       grid-template-columns: minmax(0, 1fr);
       gap: 1.25rem;
