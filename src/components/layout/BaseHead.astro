@@ -60,7 +60,7 @@ const UMAMI_WEBSITE_ID = 'YOUR-WEBSITE-ID'; // Replace with your Umami website I
 
 <!-- ─── Open Graph ──────────────────────────────────────────────────────── -->
 <meta property="og:type" content={type} />
-<meta property="og:site_name" content="Usman Kolawole" />
+<meta property="og:site_name" content="Morayo Kolawole" />
 <meta property="og:url" content={canonical} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
@@ -79,10 +79,10 @@ const UMAMI_WEBSITE_ID = 'YOUR-WEBSITE-ID'; // Replace with your Umami website I
 <!-- ─── article metadata ────────────────────────────────────────────────── -->
 {pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
 {updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
-{type === 'article' && <meta property="article:author" content="Usman Kolawole" />}
+{type === 'article' && <meta property="article:author" content="Morayo Kolawole" />}
 
 <!-- ─── Feeds ────────────────────────────────────────────────────────────── -->
-<link rel="alternate" type="application/rss+xml" title="Usman Kolawole — RSS" href="/rss.xml" />
+<link rel="alternate" type="application/rss+xml" title="Morayo Kolawole — RSS" href="/rss.xml" />
 <link
   rel="alternate"
   type="application/feed+json"
@@ -118,12 +118,12 @@ const UMAMI_WEBSITE_ID = 'YOUR-WEBSITE-ID'; // Replace with your Umami website I
         dateModified: (updatedDate ?? pubDate).toISOString(),
         author: {
           '@type': 'Person',
-          name: 'Usman Kolawole',
+          name: 'Morayo Kolawole',
           url: siteUrl.toString(),
         },
         publisher: {
           '@type': 'Person',
-          name: 'Usman Kolawole',
+          name: 'Morayo Kolawole',
         },
         mainEntityOfPage: {
           '@type': 'WebPage',
@@ -141,7 +141,7 @@ const UMAMI_WEBSITE_ID = 'YOUR-WEBSITE-ID'; // Replace with your Umami website I
       set:html={JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebSite',
-        name: 'Usman Kolawole',
+        name: 'Morayo Kolawole',
         url: siteUrl.toString(),
         description: 'Personal site — writing, research, and projects',
         potentialAction: {

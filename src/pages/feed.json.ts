@@ -10,12 +10,12 @@ export async function GET(context: APIContext) {
 
   const feed = {
     version: 'https://jsonfeed.org/version/1.1',
-    title: 'Usman Kolawole — Writing',
+    title: 'Morayo Kolawole — Writing',
     home_page_url: site,
     feed_url: `${site}feed.json`,
     description: 'Essays, research notes, and reflections by Your Name.',
     icon: `${site}favicon.svg`,
-    authors: [{ name: 'Usman Kolawole', url: site }],
+    authors: [{ name: 'Morayo Kolawole', url: site }],
     language: 'en-US',
     items: sorted.map((post) => ({
       id: `${site}writing/${post.id.replace(/\.md$/, '')}/`,

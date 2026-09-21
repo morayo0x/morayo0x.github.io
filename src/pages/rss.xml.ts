@@ -9,7 +9,7 @@ export async function GET(context: APIContext) {
   const sorted = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
   return rss({
-    title: 'Usman Kolawole — Writing',
+    title: 'Morayo Kolawole — Writing',
     description: 'Essays, research notes, and reflections by Your Name.',
     site: context.site!,
     xmlns: {
@@ -18,8 +18,8 @@ export async function GET(context: APIContext) {
     customData: `
       <language>en-us</language>
       <atom:link href="${new URL('rss.xml', context.site)}" rel="self" type="application/rss+xml" />
-      <copyright>© ${new Date().getFullYear()} Usman Kolawole</copyright>
-      <managingEditor>you@example.com (Usman Kolawole)</managingEditor>
+      <copyright>© ${new Date().getFullYear()} Morayo Kolawole</copyright>
+      <managingEditor>you@example.com (Morayo Kolawole)</managingEditor>
     `,
     items: sorted.map((post) => ({
       title: post.data.title,

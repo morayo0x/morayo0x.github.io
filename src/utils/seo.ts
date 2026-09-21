@@ -30,7 +30,7 @@ export function articleSchema(post: CollectionEntry<'writing'>, site: URL, ogIma
 
     publisher: {
       '@type': 'Person',
-      name: 'Usman Kolawole',
+      name: 'Morayo Kolawole',
       url: site.toString(),
     },
     mainEntityOfPage: {
