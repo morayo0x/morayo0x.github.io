@@ -1,7 +1,6 @@
 ---
 // src/pages/writing/index.astro
 import BaseLayout from '@layouts/BaseLayout.astro';
-import PostCard from '@components/blog/PostCard.astro';
 import { getAllWriting, getAllTags, getWritingByCategory, formatDate } from '@utils/content';
 
 const posts = await getAllWriting();
@@ -61,7 +60,7 @@ const categories = [
             <div class="cat-posts">
               {catPosts.length > 0 ? (
                 catPosts.map((post) => (
-                  <a href={`/writing/${post.id}/`} class="cat-post-card">
+                  <a href={`/writing/${post.id.replace(/\.md$/, '')}/`} class="cat-post-card">
                     <h3 class="cat-post-title">{post.data.title}</h3>
                     <p class="cat-post-desc">{post.data.description}</p>
                     <div class="cat-post-meta">
