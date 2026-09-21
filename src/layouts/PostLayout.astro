@@ -47,8 +47,14 @@ const hasToc = toc && headings.filter((h) => h.depth <= 3).length > 2;
   updatedDate={updatedDate}
   image={ogImage}
 >
+  <div id="reading-progress" role="progressbar" aria-hidden="true" style="width:0%"></div>
+
   <!-- Single centered column wrapper for EVERYTHING -->
-  <div class="page-wrap">
+  <div
+    class="page-wrap"
+    data-pagefind-body
+    data-pagefind-meta={`category:${categoryLabel}, date:${formatDate(pubDate, 'short')}`}
+  >
     <!-- ── Header ─────────────────────────────────────────────────────── -->
     <header class="post-header">
       <div class="post-header-meta">
@@ -125,7 +131,7 @@ const hasToc = toc && headings.filter((h) => h.depth <= 3).length > 2;
     <!-- ── TOC (inline, above content, visible on medium screens) ─────── -->
     {
       hasToc && (
-        <nav class="toc-inline" aria-label="Table of contents">
+        <nav class="toc-inline" aria-label="Table of contents" data-pagefind-ignore>
           <p class="toc-inline-label">Contents</p>
           <TableOfContents headings={headings} />
         </nav>
@@ -138,7 +144,7 @@ const hasToc = toc && headings.filter((h) => h.depth <= 3).length > 2;
     </article>
 
     <!-- ── Footer ─────────────────────────────────────────────────────── -->
-    <footer class="post-footer">
+    <footer class="post-footer" data-pagefind-ignore>
       {
         tags.length > 0 && (
           <div class="post-tags">
@@ -601,6 +607,20 @@ const hasToc = toc && headings.filter((h) => h.depth <= 3).length > 2;
     }
   }
 </style>
+
+<!-- Reading progress -->
+<script>
+  const bar = document.getElementById('reading-progress');
+  if (bar) {
+    const updateProgress = () => {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? Math.min(100, (window.scrollY / docHeight) * 100) : 0;
+      bar.style.width = `${pct}%`;
+    };
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+  }
+</script>
 
 <!-- TOC active highlighting -->
 <script>

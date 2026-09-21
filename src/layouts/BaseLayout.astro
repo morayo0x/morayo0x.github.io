@@ -29,9 +29,6 @@ const props = Astro.props;
     <!-- Skip to main content (accessibility) -->
     <a href="#main" class="skip-link">Skip to content</a>
 
-    <!-- Reading progress bar (shown on long-form pages) -->
-    <div id="reading-progress" role="progressbar" aria-hidden="true" style="width:0%"></div>
-
     <Header />
 
     <main id="main" tabindex="-1">
@@ -39,20 +36,5 @@ const props = Astro.props;
     </main>
 
     <Footer />
-
-    <!-- Reading progress script -->
-    <script>
-      const bar = document.getElementById('reading-progress');
-      if (bar) {
-        const updateProgress = () => {
-          const scrollTop = window.scrollY;
-          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-          const pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
-          bar.style.width = `${pct}%`;
-        };
-        window.addEventListener('scroll', updateProgress, { passive: true });
-        updateProgress();
-      }
-    </script>
   </body>
 </html>
