@@ -26,6 +26,11 @@ const writingCollection = defineCollection({
     // Slug of a thread in the threads collection, when it belongs to one.
     thread: z.string().optional(),
 
+    // Specimen text, here so the layout can be seen with something in it.
+    // The site-wide notice keys off this, so deleting the samples removes
+    // the notice with them — nothing to remember to switch off.
+    sample: z.boolean().default(false),
+
     // SEO overrides
     canonicalURL: z.string().url().optional(),
     ogImage: z.string().optional(),

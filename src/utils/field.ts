@@ -45,6 +45,11 @@ export async function getThread(id: string): Promise<ThreadWithPosts | undefined
   return (await getThreads()).find(({ thread }) => thread.id === id);
 }
 
+/** True while any published piece is still specimen text. */
+export async function hasSamples(): Promise<boolean> {
+  return (await getAllWriting()).some((p) => p.data.sample);
+}
+
 /** Pieces belonging to no thread. */
 export async function getLoose(): Promise<Letter[]> {
   const [threads, posts] = await Promise.all([getCollection('threads'), getAllWriting()]);
