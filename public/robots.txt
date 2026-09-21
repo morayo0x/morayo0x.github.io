@@ -4,4 +4,4 @@ Allow: /
 # Block drafts directory if it ever accidentally builds
 Disallow: /drafts/
 
-Sitemap: https://yourusername.github.io/sitemap-index.xml
+Sitemap: https://morayo0x.github.io/sitemap-index.xml
