@@ -2,11 +2,31 @@
 // src/pages/index.astro
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PostCard from '@components/blog/PostCard.astro';
-import { getRecentWriting, getFeaturedWriting, formatDate } from '@utils/content';
+import {
+  getRecentWriting,
+  getFeaturedWriting,
+  getWritingByCategory,
+  formatDate,
+} from '@utils/content';
 
 const recent = await getRecentWriting(6);
 const featured = await getFeaturedWriting(1);
 const hero = featured[0] ?? recent[0];
+
+const categories = [
+  {
+    href: '/writing/reflections/',
+    label: 'Reflections',
+    desc: 'essays and observations',
+    count: (await getWritingByCategory('reflections')).length,
+  },
+  {
+    href: '/writing/projects/',
+    label: 'Projects',
+    desc: 'technical writing and deep dives',
+    count: (await getWritingByCategory('projects')).length,
+  },
+];
 ---
 
 <BaseLayout
@@ -15,16 +35,20 @@ const hero = featured[0] ?? recent[0];
 >
   <!-- ─── Hero ──────────────────────────────────────────────────────────── -->
   <section class="hero">
-    <div class="container hero-inner">
+    <div class:list={['container', 'hero-inner', { 'hero-inner--solo': !hero }]}>
       <div class="hero-text">
         <p class="hero-eyebrow">Hello, I'm</p>
         <h1 class="hero-name">Morayo<span class="hero-dot">.</span></h1>
 
-        <p class="hero-bio">Personal writing on ideas, work, and what I'm paying attention to.</p>
+        <p class="hero-bio">
+          Computer science at the University of Lagos, by way of physics. I write about machine
+          learning, the systems people build around it, and whatever I am currently failing to
+          understand.
+        </p>
 
         <div class="hero-social">
           <a
-            href="https://github.com/yourusername"
+            href="https://github.com/morayo0x"
             target="_blank"
             rel="noopener"
             class="hero-social-link"
@@ -93,15 +117,17 @@ const hero = featured[0] ?? recent[0];
   <section class="categories-section">
     <div class="container">
       <div class="categories-grid">
-        <a href="/writing/reflections/" class="category-card category-card-reflections">
-          <h2 class="category-card-title">Reflections</h2>
-          <p class="category-card-desc">personal essays</p>
-        </a>
-
-        <a href="/writing/projects/" class="category-card category-card-projects">
-          <h2 class="category-card-title">Projects</h2>
-          <p class="category-card-desc">technical writing, and deep explorations.</p>
-        </a>
+        {
+          categories.map(({ href, label, desc, count }) => (
+            <a href={href} class="category-card">
+              <div class="category-card-head">
+                <h2 class="category-card-title">{label}</h2>
+                <span class="category-card-count">{count}</span>
+              </div>
+              <p class="category-card-desc">{desc}</p>
+            </a>
+          ))
+        }
       </div>
     </div>
   </section>
@@ -109,14 +135,39 @@ const hero = featured[0] ?? recent[0];
   <!-- ─── recent writing ────────────────────────────────────────────────── -->
   <section class="recent-section">
     <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Recent writing</h2>
-        <a href="/writing/" class="section-more">All notes →</a>
-      </div>
-
-      <div class="post-list">
-        {recent.map((post) => <PostCard post={post} />)}
-      </div>
+      {
+        recent.length > 0 ? (
+          <>
+            <div class="section-header">
+              <h2 class="section-title">Recent writing</h2>
+              <a href="/writing/" class="section-more">
+                All notes →
+              </a>
+            </div>
+            <div class="post-list">
+              {recent.map((post) => (
+                <PostCard post={post} />
+              ))}
+            </div>
+          </>
+        ) : (
+          <div class="empty-state">
+            <h2 class="empty-state-title">Nothing published yet</h2>
+            <p class="empty-state-desc">
+              The first notes are being written. Subscribe to the feed if you want them when they
+              land.
+            </p>
+            <div class="empty-state-actions">
+              <a href="/rss.xml" class="btn btn-ghost">
+                RSS
+              </a>
+              <a href="/feed.json" class="btn btn-ghost">
+                JSON feed
+              </a>
+            </div>
+          </div>
+        )
+      }
     </div>
   </section>
 </BaseLayout>
@@ -133,6 +184,12 @@ const hero = featured[0] ?? recent[0];
     grid-template-columns: 1fr 1fr;
     gap: 3.5rem;
     align-items: center;
+  }
+
+  /* No posts yet — nothing to put in the right column. */
+  .hero-inner--solo {
+    grid-template-columns: 1fr;
+    max-width: 44rem;
   }
 
   @media (max-width: 768px) {
@@ -341,6 +398,19 @@ const hero = featured[0] ?? recent[0];
     color: var(--color-accent);
   }
 
+  .category-card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .category-card-count {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-subtle);
+  }
+
   .category-card-title {
     font-family: var(--font-display);
     font-size: 1.125rem;
@@ -398,5 +468,37 @@ const hero = featured[0] ?? recent[0];
   .post-list {
     display: flex;
     flex-direction: column;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-elevated);
+    border-radius: 0.75rem;
+    padding: 2rem 2.25rem;
+  }
+
+  .empty-state-title {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    margin: 0 0 0.5rem;
+  }
+
+  .empty-state-desc {
+    font-family: var(--font-serif);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    margin: 0 0 1.25rem;
+    max-width: 48ch;
+  }
+
+  .empty-state-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
   }
 </style>
