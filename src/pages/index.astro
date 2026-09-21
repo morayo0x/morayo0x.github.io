@@ -2,12 +2,21 @@
 // src/pages/index.astro — the field
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Field from '@components/field/Field.astro';
-import { getAllWriting, getByDate, getThreads, getLoose, stampMonth, postUrl } from '@utils/field';
+import { getAllWriting, getByDate, getThreads, getLoose, stamp, postUrl } from '@utils/field';
 
 const posts = await getAllWriting();
-const recent = (await getByDate()).slice(0, 3);
 const threads = await getThreads();
 const loose = await getLoose();
+
+const byDate = await getByDate();
+const [lead, ...rest] = byDate.slice(0, 3);
+
+// Which thread a piece belongs to, for the lead card's badge.
+const threadOf = new Map<string, (typeof threads)[number]>();
+for (const t of threads) {
+  for (const p of t.posts) threadOf.set(p.id, t);
+}
+const leadThread = lead ? threadOf.get(lead.id) : undefined;
 
 const span =
   posts.length > 0
@@ -17,78 +26,123 @@ const span =
 
 <BaseLayout
   title="Home"
-  description="Writing placed on a field: where each piece sits between formal systems and the institutions people run, and how far it has been checked."
+  description="Morayo — computer science at the University of Lagos, by way of physics. Writing on machine learning, how it gets taught, and what happens when either meets an institution."
 >
-  <div class="container field-page">
+  <div class="container home">
     <header class="intro">
-      <h1 class="intro-title">A field of unfinished proofs</h1>
-      <p class="intro-line">
-        Not a list by date. Where a piece sits between the human scale and the cosmic one, and how
-        far it has been carried from a hunch toward something checked.
-        {
-          span && (
-            <span class="intro-span">
-              {posts.length} pieces, {span}.
-            </span>
-          )
-        }
+      <h1 class="intro-lead">
+        I study computer science at the University of Lagos, by way of physics.
+      </h1>
+      <p class="intro-body">
+        Most of my work is about how machine learning gets taught — curriculum for the lecturers who
+        will teach it, training for the people who will build with it. The rest is my own study,
+        done slowly and from first principles, because I have not found a faster way that sticks.
+      </p>
+      <p class="intro-body">
+        I write here about what I cannot put down: what a model is actually doing under the
+        notation, what an argument owes you before you are allowed to believe it, and what becomes
+        of either once it meets an institution.
       </p>
     </header>
 
     {
       posts.length > 0 ? (
-        <div class="field-layout">
-          <div class="field-plot">
-            <Field posts={posts} threads={threads} labels={true} linked={true} />
-          </div>
+        <>
+          <section class="plot-section" aria-labelledby="field-heading">
+            <div class="plot-head">
+              <h2 id="field-heading" class="label">
+                The field
+              </h2>
+              <p class="plot-caption">
+                Placed, not listed. Across, the human scale to the cosmic; down, a hunch to
+                something checked.
+                <span class="plot-count">
+                  {posts.length} pieces, {span}.
+                </span>
+              </p>
+            </div>
+            <div class="plot-frame">
+              <Field posts={posts} threads={threads} labels={true} linked={true} />
+            </div>
+          </section>
 
-          <aside class="field-side">
-            {threads.length > 0 && (
-              <div class="side-block">
-                <p class="label">Threads</p>
-                {threads.map(({ thread, posts: tp }) => (
-                  <a href={`/threads/${thread.id}/`} class="thread-row">
-                    <span class="thread-head">
-                      <span
-                        class="thread-dot"
-                        style={`background: ${thread.data.crossing ? 'var(--accent-b)' : 'var(--accent-a)'}`}
-                      />
-                      <span class="thread-name">{thread.data.title}</span>
-                      <span class="thread-count">{tp.length}</span>
-                    </span>
-                    <span class="thread-question">{thread.data.question}</span>
+          <section class="recent" aria-labelledby="recent-heading">
+            <h2 id="recent-heading" class="label">
+              Most recent
+            </h2>
+
+            <a href={postUrl(lead)} class="lead-card">
+              <span class="lead-meta">
+                <span class="stamp">{stamp(lead.data.pubDate)}</span>
+                {leadThread && (
+                  <span
+                    class="lead-thread"
+                    style={`color: ${leadThread.thread.data.crossing ? 'var(--accent-b)' : 'var(--accent-a)'}`}
+                  >
+                    <span
+                      class="lead-dot"
+                      style={`background: ${leadThread.thread.data.crossing ? 'var(--accent-b)' : 'var(--accent-a)'}`}
+                    />
+                    {leadThread.thread.data.title}
+                  </span>
+                )}
+              </span>
+              <span class="lead-title">{lead.data.title}</span>
+              <span class="lead-desc">{lead.data.description}</span>
+            </a>
+
+            {rest.length > 0 && (
+              <div class="rest">
+                {rest.map((post) => (
+                  <a href={postUrl(post)} class="rest-row">
+                    <span class="stamp rest-date">{stamp(post.data.pubDate)}</span>
+                    <span class="rest-title">{post.data.title}</span>
                   </a>
                 ))}
-                {loose.length > 0 && (
-                  <p class="thread-loose">
-                    <span class="thread-dot thread-dot--hollow" />
-                    {loose.length} loose, belonging to nothing
-                  </p>
-                )}
               </div>
             )}
 
-            <div class="side-block side-recent">
-              <p class="label">Most recent</p>
-              {recent.map((post) => (
-                <a href={postUrl(post)} class="recent-row">
-                  <span class="stamp">{stampMonth(post.data.pubDate)}</span>
-                  <span class="recent-title">{post.data.title}</span>
+            <a href="/by-date/" class="more">
+              All, by date →
+            </a>
+          </section>
+
+          {threads.length > 0 && (
+            <section class="threads" aria-labelledby="threads-heading">
+              <h2 id="threads-heading" class="label">
+                Threads
+              </h2>
+              {threads.map(({ thread, posts: tp }) => (
+                <a href={`/threads/${thread.id}/`} class="thread-row">
+                  <span class="thread-head">
+                    <span
+                      class="thread-dot"
+                      style={`background: ${thread.data.crossing ? 'var(--accent-b)' : 'var(--accent-a)'}`}
+                    />
+                    <span class="thread-name">{thread.data.title}</span>
+                    <span class="thread-count">
+                      {tp.length} {tp.length === 1 ? 'piece' : 'pieces'}
+                    </span>
+                  </span>
+                  <span class="thread-question">{thread.data.question}</span>
                 </a>
               ))}
-              <a href="/by-date/" class="side-more">
-                All, by date →
-              </a>
-            </div>
-          </aside>
-        </div>
+              {loose.length > 0 && (
+                <p class="thread-loose">
+                  <span class="thread-dot thread-dot--hollow" />
+                  {loose.length} loose, belonging to nothing
+                </p>
+              )}
+            </section>
+          )}
+        </>
       ) : (
         <div class="empty">
-          <h2 class="empty-title">The field is empty</h2>
+          <h2 class="empty-title">Nothing placed yet</h2>
           <p class="empty-body">
-            Nothing has been placed yet. Each piece takes a position — how far it sits from the
-            human scale toward the cosmic one, and how far from a hunch toward something checked —
-            and threads are drawn through the pieces that share a question.
+            Each piece takes a position — how far it sits from the human scale toward the cosmic
+            one, and how far from a hunch toward something checked — and threads are drawn through
+            the pieces that share a question.
           </p>
           <p class="empty-body">
             The plot appears once there is something to plot. Until then, the feed is the way to
@@ -104,76 +158,195 @@ const span =
 </BaseLayout>
 
 <style>
-  .field-page {
-    padding-top: 3rem;
+  .home {
+    max-width: 58rem;
+    padding-top: 3.5rem;
     padding-bottom: 2rem;
   }
 
+  /* ── Intro ── */
   .intro {
-    margin-bottom: 2rem;
-    max-width: 62ch;
+    max-width: 60ch;
+    margin-bottom: 3.5rem;
   }
 
-  .intro-title {
+  .intro-lead {
     font-family: var(--font-serif);
-    font-size: clamp(1.75rem, 3.5vw, 2.125rem);
+    font-size: clamp(1.5rem, 3.2vw, 1.9rem);
     font-weight: 600;
+    line-height: 1.35;
     letter-spacing: -0.01em;
     color: var(--color-text);
-    margin: 0 0 0.5rem;
-    line-height: 1.2;
+    margin: 0 0 1.25rem;
   }
 
-  .intro-line {
+  .intro-body {
+    font-family: var(--font-serif);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--color-text-muted);
+    margin: 0 0 1rem;
+  }
+
+  .intro-body:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── Plot ── */
+  .plot-section {
+    margin-bottom: 3.5rem;
+  }
+
+  .plot-head {
+    margin-bottom: 1.25rem;
+  }
+
+  .plot-head .label {
+    margin-bottom: 0.4rem;
+  }
+
+  .plot-caption {
     font-family: var(--font-serif);
     font-style: italic;
-    font-size: 1rem;
-    line-height: 1.65;
+    font-size: 0.9375rem;
+    line-height: 1.6;
     color: var(--color-text-muted);
     margin: 0;
+    max-width: 64ch;
   }
 
-  .intro-span {
+  .plot-count {
     font-style: normal;
     color: var(--color-text-faint);
   }
 
-  /* ── Layout ── */
-  .field-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 860px) minmax(15rem, 1fr);
-    gap: 3.5rem;
-    align-items: start;
-  }
-
-  @media (max-width: 1100px) {
-    .field-layout {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 2.5rem;
-    }
-  }
-
-  .field-plot {
-    min-width: 0;
+  .plot-frame {
     overflow-x: auto;
   }
 
-  /* ── Side column ── */
-  .field-side {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  /* ── Most recent ── */
+  .recent {
+    margin-bottom: 3.5rem;
   }
 
-  .side-block .label {
+  .recent .label {
+    margin-bottom: 0.875rem;
+  }
+
+  .lead-card {
+    display: block;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-elevated);
+    padding: 1.5rem 1.75rem;
+    text-decoration: none;
+    transition: border-color var(--transition-fast);
+  }
+
+  .lead-card:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .lead-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+  }
+
+  .lead-thread {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .lead-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+
+  .lead-title {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+  }
+
+  .lead-card:hover .lead-title {
+    color: var(--accent-b);
+  }
+
+  .lead-desc {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    max-width: 56ch;
+  }
+
+  .rest {
+    margin-top: 0.25rem;
+  }
+
+  .rest-row {
+    display: flex;
+    gap: 1.25rem;
+    align-items: baseline;
+    text-decoration: none;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .rest-date {
+    flex-shrink: 0;
+    width: 5.5rem;
+  }
+
+  .rest-title {
+    font-family: var(--font-serif);
+    font-size: 1.0625rem;
+    line-height: 1.45;
+    color: var(--color-text);
+  }
+
+  .rest-row:hover .rest-title {
+    color: var(--accent-b);
+  }
+
+  .more {
+    display: inline-block;
+    margin-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .more:hover {
+    color: var(--color-accent-hover);
+  }
+
+  /* ── Threads ── */
+  .threads .label {
     margin-bottom: 0.875rem;
   }
 
   .thread-row {
     display: block;
     text-decoration: none;
-    padding-bottom: 0.875rem;
-    margin-bottom: 0.875rem;
+    padding: 0.875rem 0;
     border-bottom: 1px solid var(--color-border);
   }
 
@@ -181,7 +354,7 @@ const span =
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.25rem;
   }
 
   .thread-dot {
@@ -195,12 +368,12 @@ const span =
     background: transparent;
     border: 1.5px solid var(--color-text-faint);
     display: inline-block;
-    margin-right: 0.4rem;
+    margin-right: 0.45rem;
   }
 
   .thread-name {
     font-family: var(--font-serif);
-    font-size: 1.0625rem;
+    font-size: 1.1875rem;
     font-weight: 600;
     color: var(--color-text);
     flex: 1;
@@ -213,6 +386,8 @@ const span =
   .thread-count {
     font-family: var(--font-mono);
     font-size: 0.625rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--color-text-faint);
   }
 
@@ -220,54 +395,20 @@ const span =
     display: block;
     font-family: var(--font-serif);
     font-style: italic;
-    font-size: 0.9375rem;
-    line-height: 1.55;
+    font-size: 1rem;
+    line-height: 1.6;
     color: var(--color-text-muted);
+    max-width: 68ch;
   }
 
   .thread-loose {
     font-family: var(--font-serif);
     font-style: italic;
-    font-size: 0.9375rem;
+    font-size: 1rem;
     color: var(--color-text-muted);
-    margin: 0;
+    margin: 0.875rem 0 0;
     display: flex;
     align-items: center;
-  }
-
-  .side-recent {
-    border-top: 1px solid var(--color-border);
-    padding-top: 1.25rem;
-  }
-
-  .recent-row {
-    display: flex;
-    gap: 0.875rem;
-    align-items: baseline;
-    text-decoration: none;
-    padding: 0.25rem 0;
-  }
-
-  .recent-title {
-    font-family: var(--font-serif);
-    font-size: 0.9375rem;
-    line-height: 1.45;
-    color: var(--color-text);
-  }
-
-  .recent-row:hover .recent-title {
-    color: var(--accent-b);
-  }
-
-  .side-more {
-    display: inline-block;
-    margin-top: 0.625rem;
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-    text-decoration: none;
   }
 
   /* ── Empty ── */
@@ -308,5 +449,18 @@ const span =
 
   .empty-link:hover {
     border-color: var(--color-accent);
+  }
+
+  @media (max-width: 560px) {
+    .lead-card {
+      padding: 1.25rem 1.25rem;
+    }
+    .rest-row {
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .rest-date {
+      width: auto;
+    }
   }
 </style>

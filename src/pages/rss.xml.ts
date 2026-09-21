@@ -7,7 +7,8 @@ export async function GET(context: APIContext) {
 
   return rss({
     title: 'Morayo — Writing',
-    description: 'Writing placed on a field, between the human scale and the cosmic one.',
+    description:
+      'Machine learning, how it gets taught, and what becomes of either once it meets an institution.',
     site: context.site!,
     customData: `
       <language>en</language>
