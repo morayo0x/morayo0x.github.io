@@ -3,19 +3,13 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 ---
 
-<BaseLayout
-  title="404 — Page Not Found"
-  description="This page doesn't exist."
-  noindex={true}
->
+<BaseLayout title="404 — Page Not Found" description="This page doesn't exist." noindex={true}>
   <div class="not-found">
     <div class="container">
       <div class="not-found-inner">
         <p class="not-found-code" aria-hidden="true">404</p>
         <h1 class="not-found-title">Page not found</h1>
-        <p class="not-found-desc">
-          This page doesn't exist or has moved.
-        </p>
+        <p class="not-found-desc">This page doesn't exist or has moved.</p>
         <div class="not-found-actions">
           <a href="/" class="btn-primary-link">← Go home</a>
           <a href="/writing/" class="btn-ghost-link">Browse writing</a>
@@ -76,7 +70,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
     font-family: var(--font-sans);
     font-size: 0.9375rem;
     font-weight: 600;
-    color: white;
+    color: var(--color-on-accent);
     background: var(--color-accent);
     padding: 0.55rem 1.1rem;
     border-radius: 0.375rem;
@@ -84,7 +78,9 @@ import BaseLayout from '@layouts/BaseLayout.astro';
     transition: background var(--transition-fast);
   }
 
-  .btn-primary-link:hover { background: var(--color-accent-hover); }
+  .btn-primary-link:hover {
+    background: var(--color-accent-hover);
+  }
 
   .btn-ghost-link {
     font-family: var(--font-sans);
@@ -95,7 +91,9 @@ import BaseLayout from '@layouts/BaseLayout.astro';
     padding: 0.55rem 1.1rem;
     border-radius: 0.375rem;
     text-decoration: none;
-    transition: color var(--transition-fast), background var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background var(--transition-fast);
   }
 
   .btn-ghost-link:hover {
